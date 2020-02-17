@@ -1,0 +1,223 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+
+<suite name="MobiFin 5.0 - Admin Portal" verbose="10" parallel="tests"
+	thread-count="11">
+
+	<listeners>
+		<listener class-name='com.panamax.init.CustomizedEmailableReport' />
+		<listener class-name='com.panamax.init.TestListner' />
+	</listeners>
+	<parameter name="browserType" value="chrome" />
+	<parameter name="appURL" value="http://10.10.180.79:7001/" />
+
+	<test name="Mobifin 5.0 : Business Configuration 1">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 2">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 3">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 4">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 5">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 6">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 7">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 8">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 9">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 10">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	<test name="Mobifin 5.0 : Business Configuration 11">
+		<classes>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorEntity">
+				<methods>
+					<include name="addSystemOperatorEntity" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.OperatorConfigSystemOperatorOnboarding">
+				<methods>
+					<include name="addSystemOperatorOnboarding" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+</suite>

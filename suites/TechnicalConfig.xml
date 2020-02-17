@@ -1,0 +1,49 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+
+<suite name="MobiFin 5.0 - Admin Portal" verbose="10"
+	parallel="false" thread-count="1">
+
+	<listeners>
+		<listener class-name='com.panamax.init.CustomizedEmailableReport' />
+	</listeners>
+	<parameter name="browserType" value="chrome" />
+	<parameter name="appURL" value="http://10.10.180.79:7001/" />
+	
+ 	<test name="Mobifin 5.0 : Technical Config">
+		<classes>
+			<class name="com.panamax.testcases.TechnicalConfigReportTool">
+				<methods>
+					<include name="addReportTool" />
+					<include name="editReportTool" />
+					<include name="deleteReportTool" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.TechnicalConfigProcess">
+				<methods>
+					<include name="process" />
+				</methods>
+			</class>	
+			<class name="com.panamax.testcases.TechnicalConfigScheduler">
+				<methods>
+					<include name="addScheduler" />
+					<include name="editScheduler" />
+					<include name="deleteScheduler" />
+				</methods>
+			</class>	
+			<class name="com.panamax.testcases.TechnicalConfigProcessScheduler">
+				<methods>
+					<include name="addProcessScheduler" />
+					<include name="editProcessScheduler" />
+					<include name="deleteProcessScheduler" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.TechnicalConfigProcessRunDetails">
+				<methods>
+					<include name="processRunDetails" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	
+</suite>

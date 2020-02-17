@@ -1,0 +1,76 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+
+<suite name="MobiFin 5.0 - Admin Portal" verbose="10"
+	parallel="false" thread-count="1">
+
+	<listeners>
+		<listener class-name='com.panamax.init.CustomizedEmailableReport' />
+	</listeners>
+	<parameter name="browserType" value="chrome" />
+	<parameter name="appURL" value="http://10.10.180.79:7001/" />
+	
+	<test name="Mobifin 5.0 : Business Configuration">
+		<classes>
+			<class name="com.panamax.testcases.BusinessConfigurationServiceProfile">
+				<methods>
+					<include name="addServiceProfile" />
+					<include name="editServiceProfile" />
+					<include name="deleteServiceProfile" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationBusinessZone">
+				<methods>
+					<include name="addBusinessZone" />
+					<include name="editBusinessZone" />
+					<include name="deleteBusinessZone" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationRegionalEntity">
+				<methods>
+					<include name="addRegionalEntity" />
+					<include name="editRegionalEntity" />
+					<include name="deleteRegionalEntity" />
+				</methods>                                                                                                                                                                                                                                     
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntityTemplate">
+				<methods>
+					<include name="addOperatingEntityTemplate" />
+					<include name="editOperatingEntityTemplate" />
+					<include name="deleteOperatingEntityTemplate" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationServiceVendor">
+				<methods>
+					<include name="addServiceVendor" />
+					<include name="editServiceVendor" />
+					<include name="deleteServiceVendor" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationTechnicalVendor">
+				<methods>
+					<include name="addTechnicalVendor" />
+					<include name="editTechnicalVendor" />
+					<include name="deleteTechnicalVendor" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationNotification">
+				<methods>
+					<include name="addNotification" />
+					<include name="editNotification" />
+					<include name="deleteNotification" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationProductManagement">
+				<methods>
+					<include name="editProductManagement" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.BusinessConfigurationOperatingEntity">
+				<methods>
+					<include name="addOperatingEntity" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+</suite>

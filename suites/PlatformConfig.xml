@@ -1,0 +1,115 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+
+<suite name="MobiFin 5.0 - Admin Portal" verbose="10"
+	parallel="false" thread-count="1">
+
+	<listeners>
+		<listener class-name='com.panamax.init.CustomizedEmailableReport' />
+	</listeners>
+	<parameter name="browserType" value="chrome" />
+	<parameter name="appURL" value="http://10.10.180.79:7001/" />
+	
+ 	<test name="Mobifin 5.0 : Platform Configuration">
+		<classes>
+			<class name="com.panamax.testcases.PlatformConfigurationParameter">
+				<methods>
+					<include name="addParameter" />
+					<include name="editParameter" />
+					<include name="deleteParameter" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationKYC">
+				<methods>
+					<include name="addKYC" />
+					<include name="editKYC" />
+					<include name="deleteKYC" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationUserCategory">
+				<methods>
+					<include name="addUserCategory" />
+					<include name="editUserCategory" />
+					<include name="deleteUserCategory" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationWallet">
+				<methods>
+					<include name="addWallet" />
+					<include name="editWallet" />
+					<include name="deleteWallet" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationUnit">
+				<methods>
+					<include name="addUnit" />
+					<include name="editUnit" />
+					<include name="deleteUnit" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationPouch">
+				<methods>
+					<include name="addPouch" />
+					<include name="editPouch" />
+					<include name="deletePouch" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationService">
+				<methods>
+					<include name="addService" />
+					<include name="editService" />
+					<include name="deleteService" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationAccessChannel">
+				<methods>
+					<include name="addAccessChannel" />
+					<include name="editAccessChannel" />
+					<include name="deleteAccessChannel" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationUcp">
+				<methods>
+					<include name="addUcp" />
+					<include name="editUcp" />
+					<include name="deleteUcp" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationCounter">
+				<methods>
+					<include name="addCounter" />
+					<include name="editCounter" />
+					<include name="deleteCounter" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationRule">
+				<methods>
+					<include name="addRule" />
+					<include name="editRule" />
+					<include name="deleteRule" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationNotificationTemplate">
+				<methods>
+					<include name="addNotificationTemplate" />
+					<include name="editNotificationTemplate" />
+					<include name="deleteNotificationTemplate" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationProduct">
+				<methods>
+					<include name="addProduct" />
+					<include name="editProduct" />
+					<include name="deleteProduct" />
+				</methods>
+			</class>
+			<class name="com.panamax.testcases.PlatformConfigurationProductGroup">
+				<methods>
+					<include name="addProductGroup" />
+					<include name="editProductGroup" />
+					<include name="deleteProductGroup" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+</suite>

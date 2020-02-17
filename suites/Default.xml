@@ -1,0 +1,25 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+
+<suite name="MobiFin 4.1.0 - Admin Portal - Settings" verbose="10"
+	parallel="false" thread-count="1">
+
+	<listeners>
+		<listener class-name='com.panamax.init.CustomizedEmailableReport' />
+	</listeners>
+	<parameter name="browserType" value="chrome" />
+	<parameter name="appURL" value="http://admin-410loadtest.panamaxil.com" />
+	
+	
+	<test name="Mobifin 4.1.0 : Default Data Script">
+		<classes>
+			<class name="com.panamax.testcases.Default">
+				<methods>
+					<include name="defaultData" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	
+</suite>
+	

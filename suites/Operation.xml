@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+
+<suite name="MobiFin 5.0 - Admin Portal" verbose="10"
+	parallel="false" thread-count="1">
+
+	<listeners>
+		<listener class-name='com.panamax.init.CustomizedEmailableReport' />
+	</listeners>
+	<parameter name="browserType" value="chrome" />
+	<parameter name="appURL" value="http://10.10.180.79:7001/" />
+	
+ 	<test name="Mobifin 5.0 : Operation">
+		<classes>
+			<class name="com.panamax.testcases.OperationAddMoney">
+				<methods>
+					<include name="addAddMoney" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+	
+</suite>
