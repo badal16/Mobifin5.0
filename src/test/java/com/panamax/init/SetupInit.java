@@ -599,7 +599,6 @@ public class SetupInit {
 			try {
 				setDriver(targetBrowser);
 				testContext.setAttribute("WebDriver", this.driver);
-				commonWeb.commonWait(5);
 			} catch (Exception e) {
 				System.out.println(e);
 			}
@@ -694,10 +693,8 @@ public class SetupInit {
 			executeCommand("./allure-serve.bat");
 	}
 
-	public boolean isDisplayed(By locator) {
+	public boolean isLoderDisplayed(By locator) {
 		boolean state = false;
-		// driver.manage().timeouts().implicitlyWait(GENERAL_TIMEOUT,
-		// TimeUnit.SECONDS);
 		try {
 			state = driver.findElement(locator).isDisplayed();
 		} catch (Exception e) {
@@ -706,17 +703,31 @@ public class SetupInit {
 		return state;
 	}
 
-	public boolean isDisplayed(By locator, boolean wait) {
-		waitForLoader();
+	public boolean isDisplayed(By locator, int... wait) {
+		// waitForLoader();
 		boolean state = false;
-		if (wait)
-			driver.manage().timeouts().implicitlyWait(MAX_WAIT_TIME_IN_SEC, TimeUnit.SECONDS);
-		else
-			driver.manage().timeouts().implicitlyWait(POLLING_MAX_TIME_IN_MILLISEC, TimeUnit.MILLISECONDS);
+		// if (wait)
+		// driver.manage().timeouts().implicitlyWait(MAX_WAIT_TIME_IN_SEC,
+		// TimeUnit.SECONDS);
+		// else
+		// driver.manage().timeouts().implicitlyWait(POLLING_MAX_TIME_IN_MILLISEC,
+		// TimeUnit.MILLISECONDS);
+		// try {
+		// state = driver.findElement(locator).isDisplayed();
+		// } catch (Exception e) {
+		// state = false;
+		// }
+		// return state;+
+		int time = Integer.parseInt(ReadProperty.getPropertyValue("MAX_WAIT_TIME_IN_SEC"));
+		if (wait.length != 0)
+			if (wait[0] > 0)
+				time = wait[0];
+		WebDriverWait explicitWait = new WebDriverWait(this.driver, time);
+		WebElement element = null;
 		try {
-			state = driver.findElement(locator).isDisplayed();
+			element = explicitWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+			state = element.isDisplayed();
 		} catch (Exception e) {
-			state = false;
 		}
 		return state;
 	}
@@ -728,9 +739,9 @@ public class SetupInit {
 			e.printStackTrace();
 		}
 
-		if (isDisplayed(By.xpath("//html[@class='nprogress-busy']"))) {
+		if (isLoderDisplayed(By.xpath("//html[@class='nprogress-busy']"))) {
 			Instant currentTime = getCurrentTime();
-			while (isDisplayed(By.xpath("//html[@class='nprogress-busy']"))) {
+			while (isLoderDisplayed(By.xpath("//html[@class='nprogress-busy']"))) {
 				Instant loopingTime = getCurrentTime();
 				Duration timeElapsed = Duration.between(currentTime, loopingTime);
 				long sec = timeElapsed.toMillis() / 1000;

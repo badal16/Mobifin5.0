@@ -354,8 +354,7 @@ public class Common extends SetupInit {
 	}
 
 	/**
-	 * @author dishant.doshi To clear the text box and send new value in text
-	 *         box
+	 * @author dishant.doshi To clear the text box and send new value in text box
 	 * @param element
 	 *            for clear value and send new value
 	 * @param text
@@ -675,7 +674,7 @@ public class Common extends SetupInit {
 	 * @creation date 28/09/2018
 	 */
 	public boolean verifyElement(By element) {
-		return isDisplayed(element, false);
+		return isDisplayed(element);
 	}
 
 	/**
@@ -687,10 +686,7 @@ public class Common extends SetupInit {
 	 * @creation date 04/10/2018
 	 */
 	public boolean verifyElement(By element, boolean wait) {
-		if (wait)
-			return isDisplayed(element, true);
-		else
-			return isDisplayed(element, false);
+		return isDisplayed(element);
 	}
 
 	/**
@@ -700,12 +696,12 @@ public class Common extends SetupInit {
 	 * @creation date 28/09/2018
 	 */
 	public boolean verifyToolTip() {
-		if (isDisplayed(validationToolTipSelect, false)) {
+		if (isDisplayed(validationToolTipSelect)) {
 			String validationMessage = "Tooltip Validation Message : "
 					+ getAttributeValue(validationToolTipSelect, "data-original-title");
 			log("</br><b style='color:#E82F08'>" + validationMessage + "</b></br>");
 			return true;
-		} else if (isDisplayed(validationToolTip, false)) {
+		} else if (isDisplayed(validationToolTip)) {
 			String validationMessage = "Tooltip Validation Message : "
 					+ getAttributeValue(validationToolTip, "data-original-title");
 			log("</br><b style='color:#E82F08'>" + validationMessage + "</b></br>");
@@ -822,8 +818,8 @@ public class Common extends SetupInit {
 	}
 
 	/**
-	 * @author kutbuddin.compounder to remove read only property from text box
-	 *         and clear and send text in text box
+	 * @author kutbuddin.compounder to remove read only property from text box and
+	 *         clear and send text in text box
 	 * @param webElement
 	 * @param string
 	 * @creation date 25/10/2018
@@ -927,8 +923,8 @@ public class Common extends SetupInit {
 	 * @author dishant.doshi to set first letter of string in capital
 	 * @param string
 	 * @param onlyFirstChar
-	 *            - true if only first letter of first word in caps and false if
-	 *            all first char in caps
+	 *            - true if only first letter of first word in caps and false if all
+	 *            first char in caps
 	 * @return string with first letter in capital
 	 * @creation date 04/12/2018
 	 */
@@ -948,8 +944,8 @@ public class Common extends SetupInit {
 	}
 
 	/**
-	 * @author shivani.patel Select current date and time return current
-	 *         datetime as a String
+	 * @author shivani.patel Select current date and time return current datetime as
+	 *         a String
 	 * @creation date 13/12/2018
 	 */
 	public String getCurrentDateTime() {
