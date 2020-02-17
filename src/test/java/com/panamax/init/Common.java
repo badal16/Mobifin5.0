@@ -4,6 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -26,18 +32,29 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHttpEntityEnclosingRequest;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.HttpCommandExecutor;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.Reporter;
 
 import com.panamax.base.HomeWeb;
 import com.panamax.base.LoginWeb;
+import com.panamax.elasticUtils.LogMatrics;
 
 import oracle.jdbc.pool.OracleDataSource;
 
@@ -46,6 +63,11 @@ import oracle.jdbc.pool.OracleDataSource;
 public class Common extends SetupInit {
 	public String paginationValue = "25";
 	public static boolean booleanValue = false;
+	protected Boolean failure = false;
+	protected String reason = "None";
+	protected String detailedFailureReason = "None";
+	protected String stacktrace = "None";
+	protected float ScriptExecution = 50;
 	By btnAdd = By.id(readJSFile("OPERATIONBAR_BUTTON_ADD", FileType.element));
 	By btnSave = By.id(readJSFile("OPERATIONBAR_BUTTON_SAVE", FileType.element));
 	By btnCancel = By.xpath("(//*[normalize-space(text())='Cancel'])[last()]");
@@ -107,9 +129,56 @@ public class Common extends SetupInit {
 	public ReadXMLData fwConfigData;
 	LoginWeb loginPage;
 	HomeWeb homePage;
+	LogMatrics logMatrics = new LogMatrics("mobifin_5_automation", "data");
 
 	public enum FileType {
 		element, label
+	}
+
+	public void logData(Map<Object, Object> map) {
+		if (map.get("value") == null) {
+			map.put("value", 50);
+			logMatrics.logToElasticsearch(getDataMap(map));
+		}
+		if (Integer.parseInt((String) map.get("value")) == 100) {
+			logMatrics.logToElasticsearch(getDataMap(map));
+		}
+	}
+
+	public Map<String, Object> getDataMap(Map<Object, Object> map) {
+		Map<String, Object> dataToDump = new HashMap<>();
+		for (Map.Entry<Object, Object> e : map.entrySet()) {
+			dataToDump.put(e.getKey().toString(), e.getValue());
+		}
+		dataToDump.put("Executor ip", getIPOfNode());
+		return dataToDump;
+	}
+
+	protected void logException(Throwable e, Map<Object, Object> map) {
+
+		stacktrace = getStackStrace(e);
+		Scanner sc = new Scanner(stacktrace);
+		String firstLine = sc.nextLine();
+		sc.close();
+		Map<String, Object> dataMap = getDataMap(map);
+		dataMap.put("Failure reason", firstLine);
+		dataMap.put("Datailed failure reason", stacktrace);
+		logMatrics.logToElasticsearch(dataMap);
+		e.printStackTrace();
+	}
+
+	public static String getStackStrace(Throwable e) {
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		return sw.toString();
+	}
+
+	protected String getExceptionMessage(Throwable e) {
+		if (null != e.getMessage()) {
+			return e.getMessage();
+		} else {
+			return "";
+		}
 	}
 
 	/**
@@ -1525,4 +1594,53 @@ public class Common extends SetupInit {
 			e.printStackTrace();
 		}
 	}
+
+	public String getIPOfNode() {
+		boolean isRemote = Boolean.parseBoolean(ReadProperty.getPropertyValue(""));
+		if (isRemote) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String hostFound = null;
+			try {
+				HttpCommandExecutor ce = (HttpCommandExecutor) ((RemoteWebDriver) this.driver).getCommandExecutor();
+				String hostName = ce.getAddressOfRemoteServer().getHost();
+				int port = ce.getAddressOfRemoteServer().getPort();
+				HttpHost host = new HttpHost(hostName, port);
+				HttpClient client = new DefaultHttpClient();
+				URL sessionURL = new URL("http://" + hostName + ":" + port + "/grid/api/testsession?session="
+						+ ((RemoteWebDriver) this.driver).getSessionId());
+				BasicHttpEntityEnclosingRequest r = new BasicHttpEntityEnclosingRequest("POST",
+						sessionURL.toExternalForm());
+				HttpResponse response = client.execute(host, r);
+				JSONObject object = extractObject(response);
+				URL myURL = new URL(object.getString("proxyId"));
+				if ((myURL.getHost() != null) && (myURL.getPort() != -1)) {
+					hostFound = myURL.getHost();
+				}
+			} catch (Exception e) {
+				System.err.println(e);
+			}
+			return hostFound;
+		} else {
+			String inetAddress = null;
+			try {
+				inetAddress = InetAddress.getLocalHost().toString();
+			} catch (UnknownHostException e) {
+			}
+			return inetAddress;
+		}
+	}
+
+	public JSONObject extractObject(HttpResponse resp) throws IOException, JSONException {
+		InputStream contents = resp.getEntity().getContent();
+		StringWriter writer = new StringWriter();
+		IOUtils.copy(contents, writer, "UTF8");
+		JSONObject objToReturn = new JSONObject(writer.toString());
+		return objToReturn;
+	}
+
 }

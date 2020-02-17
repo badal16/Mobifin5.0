@@ -55,8 +55,8 @@ public class LogMatrics {
 				elasticData.put("timeStamp", sdf.format(new Date()));
 
 				Gson gson = new Gson();
-				ObjectMapper objectMapper = new ObjectMapper();
-				String json = objectMapper.writeValueAsString(elasticData);
+//				ObjectMapper objectMapper = new ObjectMapper();
+//				String json = objectMapper.writeValueAsString(elasticData);
 				Client client = ClientBuilder.newClient();
 				WebTarget webTarget = null;
 				if (this.indexName != null && this.indexType != null) {
@@ -70,8 +70,8 @@ public class LogMatrics {
 				String date = dateformatter.format(currentDate);
 				elasticData.put("Task Name", elasticData.get("Task Name") + date);
 
-//				String temp = gson.toJson(elasticData);
-				Response response = webTarget.request().post(Entity.entity(json, MediaType.APPLICATION_JSON),
+				String temp = gson.toJson(elasticData);
+				Response response = webTarget.request().post(Entity.entity(temp, MediaType.APPLICATION_JSON),
 						Response.class);
 				logger.info("Response: " + response.toString());
 			}
@@ -85,42 +85,12 @@ public class LogMatrics {
 
 	public static void main(String[] args)
 			throws InterruptedException, JsonParseException, JsonMappingException, IOException {
-		LogMatrics logMatrics = new LogMatrics("apiautomation", "docs");
-		long uniqueID = System.nanoTime();
-		String requestUniqueID = String.valueOf(uniqueID);
-		String json_string1 = "{\"MethodName1\":\"GetBalance\",\"RequestUniqueID1\":\"" + requestUniqueID
-				+ "\",\"RequestIP1\":\"192.168.33.70\",\"ActivationCode1\":\"16854947957\"}";
-		String json_string2 = "{\"MethodName\":\"GetBalance\",\"RequestUniqueID\":\"" + requestUniqueID
-				+ "\",\"RequestIP\":\"192.168.33.214\",\"ActivationCode\":\"1679947957\"}";
-
-		// for (int i = 0; i < 30; i++) {
-		// String res =
-		// "{\"ResponseCode\":\"000\",\"RequestDateTime\":\"2020-01-21
-		// 10:05:13\",\"AccessID\":\"1243811\",\"Commission\":\"0.00\",\"CommissionTax\":\"0\",\"ResponseDescription\":\"Txn
-		// Successful\",\"TransactionInfo\":\"{\"transactionId\":\"2020-01-21\",\"operatorCode\":\"100521\"}\",\"TransactionFee\":\"0.00\",\"Balance\":\"967.000000\",\"RequestUniqueID\":\"85237292223300\",\"TransactionID\":\"101122\"}";
-
-		// HashMap<String, Object> reqMap = new Gson().fromJson(json_string, new
-		// TypeToken<HashMap<String, Object>>() {
-		// }.getType());
-		//
-		// HashMap<String, Object> resMap = new Gson().fromJson(res, new
-		// TypeToken<HashMap<String, Object>>() {
-		// }.getType());
-		//
-		// reqMap.putAll(resMap);
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		// HashMap<String, Object> map = new Gson().fromJson(json_string, new
-		// TypeToken<HashMap<String, Object>>() {
-		// }.getType());
-
-		HashMap<String, String> map = mapper.readValue(json_string1, HashMap.class);
-		HashMap<String, String> map1 = (HashMap<String, String>) map.clone();
-		// map1.put(key, value)
-		// logMatrics.logToElasticsearch(map);
-		Thread.sleep(4000);
-		// }
+		
+		LogMatrics logMatrics = new LogMatrics("testkibana", "docs");
+		Map<String, Object> map  = new HashMap<>();
+		map.put("UserName", "Badal");
+		map.put("value", 0);
+		logMatrics.logToElasticsearch(map);
 	}
 
 }
