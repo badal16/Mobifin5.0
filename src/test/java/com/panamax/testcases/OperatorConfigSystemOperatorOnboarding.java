@@ -13,8 +13,10 @@ public class OperatorConfigSystemOperatorOnboarding extends Common {
 
 	HomeWeb homePage;
 	OperatorConfigSystemOperatorOnboardingWeb operatorConfigSystemOperatorOnboardingWeb;
-	int count = 0;
 	int sortCounter = 0;
+	private long startTime;
+	long start = Long.MAX_VALUE;
+	long startMS;
 
 	/**
 	 * @author shivani.patel For Platform Configuration - SystemOperatorOnboarding -
@@ -23,13 +25,13 @@ public class OperatorConfigSystemOperatorOnboarding extends Common {
 	 */
 	@Test(dataProvider = "SystemOperatorOnboarding_Add", dataProviderClass = TestDataImport.class, description = "Id: AddSystemOperatorOnboarding, Author: shivani.patel")
 	public void addSystemOperatorOnboarding(Map<Object, Object> map) {
+		startTime = System.currentTimeMillis();
 		try {
-			map.put("Method Name", "addSystemOperatorEntity");
-			if (count == 0) {
-				homePage = goToHome();
-				operatorConfigSystemOperatorOnboardingWeb = homePage.clickOnOperatorConfigSystemOperatorOnboarding();
-				count++;
-			}
+			map.put("Test Start Time", startTime);
+			map.put("Class Name", this.getClass().getName());
+			map.put("Method Name", "addSystemOperatorOnboarding");
+			homePage = goToHome();
+			operatorConfigSystemOperatorOnboardingWeb = homePage.clickOnOperatorConfigSystemOperatorOnboarding();
 			operatorConfigSystemOperatorOnboardingWeb.addSystemOperatorOnboarding(map, getMapKeys(map));
 			verifyTrue(operatorConfigSystemOperatorOnboardingWeb.verifyAddedSystemOperatorOnboarding(map,
 					getMapKeys(map)));

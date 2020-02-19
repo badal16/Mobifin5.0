@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -55,6 +56,7 @@ import org.testng.Reporter;
 import com.panamax.base.HomeWeb;
 import com.panamax.base.LoginWeb;
 import com.panamax.elasticUtils.LogMatrics;
+import com.ssts.pcloudy.dto.screenshot.CaptureDeviceScreenshotDto;
 
 import oracle.jdbc.pool.OracleDataSource;
 
@@ -68,6 +70,10 @@ public class Common extends SetupInit {
 	protected String detailedFailureReason = "None";
 	protected String stacktrace = "None";
 	protected float ScriptExecution = 50;
+	private long endTime;
+	long end = Long.MIN_VALUE;
+	long start = Long.MAX_VALUE;
+	long startMS;
 	By btnAdd = By.id(readJSFile("OPERATIONBAR_BUTTON_ADD", FileType.element));
 	By btnSave = By.id(readJSFile("OPERATIONBAR_BUTTON_SAVE", FileType.element));
 	By btnCancel = By.xpath("(//*[normalize-space(text())='Cancel'])[last()]");
@@ -129,19 +135,51 @@ public class Common extends SetupInit {
 	public ReadXMLData fwConfigData;
 	LoginWeb loginPage;
 	HomeWeb homePage;
-	LogMatrics logMatrics = new LogMatrics("mobifin_5_automation", "data");
+	LogMatrics logMatrics = new LogMatrics("automation_r&d_19_02_20", "data");
 
 	public enum FileType {
 		element, label
 	}
 
 	public void logData(Map<Object, Object> map) {
-		if (map.get("value") == null) {
-			map.put("value", 50);
-			logMatrics.logToElasticsearch(getDataMap(map));
-		}
-		if (Integer.parseInt((String) map.get("value")) == 100) {
-			logMatrics.logToElasticsearch(getDataMap(map));
+		// map.put("Steps To Reproduce", logList);
+		Map<String, Object> dataMap =  getDataMap(map);
+		if (dataMap.get("value") == null) {
+			dataMap.put("value", 50);
+
+			endTime = System.currentTimeMillis();
+			if (endTime > end)
+				end = endTime / 1000;
+			if ((Long)map.get("Test Start Time") < start) {
+				startMS = (Long)dataMap.get("Test Start Time");
+				start = startMS / 1000;
+			}
+			dataMap.put("Test Start Time", formatTime(startMS));
+			dataMap.put("Test End Time", formatTime(endTime));
+			dataMap.put("Total Execution Time", millisToTimeConversion(end - start));
+			logMatrics.logToElasticsearch(dataMap);
+			
+		} else if ((Integer) map.get("value") == 100) {
+			
+			endTime = System.currentTimeMillis();
+			if (endTime > end)
+				end = endTime / 1000;
+			if ((Long)map.get("Test Start Time") < start) {
+				startMS = (Long)dataMap.get("Test Start Time");
+				start = startMS / 1000;
+			}
+			dataMap.put("Test Start Time", formatTime(startMS));
+			dataMap.put("Test End Time", formatTime(endTime));
+			dataMap.put("Total Execution Time", millisToTimeConversion(end - start));
+			
+			logMatrics.logToElasticsearch(dataMap);
+		} else if ((Integer) dataMap.get("value") == 0) {
+			try {
+				logStatus(false);
+				Assert.assertTrue(false);
+			} catch (Exception e) {
+				throw new RuntimeException(dataMap.get("Failure Reason").toString());
+			}
 		}
 	}
 
@@ -150,21 +188,63 @@ public class Common extends SetupInit {
 		for (Map.Entry<Object, Object> e : map.entrySet()) {
 			dataToDump.put(e.getKey().toString(), e.getValue());
 		}
-		dataToDump.put("Executor ip", getIPOfNode());
+		dataToDump.put("Executor IP", getIPOfNode());
 		return dataToDump;
 	}
 
 	protected void logException(Throwable e, Map<Object, Object> map) {
-
+		// map.put("Steps To Reproduce", logList);
 		stacktrace = getStackStrace(e);
 		Scanner sc = new Scanner(stacktrace);
 		String firstLine = sc.nextLine();
 		sc.close();
 		Map<String, Object> dataMap = getDataMap(map);
-		dataMap.put("Failure reason", firstLine);
-		dataMap.put("Datailed failure reason", stacktrace);
+		dataMap.put("Failure Reason", firstLine);
+		dataMap.put("Datailed Failure Reason", stacktrace);
+		
+		endTime = System.currentTimeMillis();
+		if (endTime > end)
+			end = endTime / 1000;
+		if ((Long)dataMap.get("Test Start Time") < start) {
+			startMS = (Long)dataMap.get("Test Start Time");
+			start = startMS / 1000;
+		}
+		
+		dataMap.put("Test Start Time", formatTime(startMS));
+		dataMap.put("Test End Time", formatTime(endTime));
+		dataMap.put("Total Execution Time", millisToTimeConversion(end - start));
+		
+		String clsName = dataMap.get("Class Name").toString();
+		String className =  clsName.contains(".") ? clsName.substring(clsName.lastIndexOf('.')+1) : clsName;
+		dataMap.put("Failed Screenshot path", makeScreenshot(className, dataMap.get("Method Name").toString()));
+		
 		logMatrics.logToElasticsearch(dataMap);
 		e.printStackTrace();
+	}
+	private static String millisToTimeConversion(long seconds) {
+		final int MINUTES_IN_AN_HOUR = 60;
+		final int SECONDS_IN_A_MINUTE = 60;
+		int minutes = (int) (seconds / SECONDS_IN_A_MINUTE);
+		seconds -= minutes * SECONDS_IN_A_MINUTE;
+		int hours = minutes / MINUTES_IN_AN_HOUR;
+		minutes -= hours * MINUTES_IN_AN_HOUR;
+		return prefixZeroToDigit(hours) + ":" + prefixZeroToDigit(minutes) + ":" + prefixZeroToDigit((int) seconds);
+	}
+	
+	private static String prefixZeroToDigit(int num) {
+		int number = num;
+		if (number <= 9) {
+			String sNumber = "0" + number;
+			return sNumber;
+		} else
+			return "" + number;
+	}
+	
+	public String formatTime(long time) {
+		DateFormat formatter = new SimpleDateFormat("kk:mm:ss");
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(time);
+		return formatter.format(calendar.getTime());
 	}
 
 	public static String getStackStrace(Throwable e) {
@@ -278,6 +358,7 @@ public class Common extends SetupInit {
 			value = webElement.getAttribute("class");
 		}
 		allureLog("Sent text in " + value + ": " + text);
+		// logList.add("Sent text in " + value + ": " + text);
 		value = "<b><span style='color:#3f0713'>" + value + "</span></b>";
 		text = "<b><span style='color:#418eb5'>" + text + "</span></b>";
 		log("Sent text in " + value + ": " + text);
@@ -306,6 +387,7 @@ public class Common extends SetupInit {
 				&& (!webElement.getAttribute("class").equals("") || !webElement.getAttribute("class").equals(null))) {
 			value = webElement.getAttribute("class");
 		}
+		// logList.add("Sent text in " + value + ": " + key);
 		value = "<b><span style='color:#3f0713'>" + value + "</span></b>";
 		String text = "<b><span style='color:#418eb5'>" + key + "</span></b>";
 		log("Sent text in " + value + ": " + text);
@@ -343,6 +425,7 @@ public class Common extends SetupInit {
 		}
 		findVisibleElement(element).click();
 		allureLog("Clicked on " + value);
+		// logList.add("Clicked on " + value);
 		value = "<b><span style='color:#3f0713'>" + value + "</span></b>";
 		log("Clicked on " + value);
 	}
@@ -475,6 +558,7 @@ public class Common extends SetupInit {
 					|| !webElement.getAttribute("value").equals(null))) {
 				value = webElement.getAttribute("value");
 			}
+			// logList.add("Selected text " + string + " from " + value);
 			value = "<b><span style='color:#3f0713'>" + value + "</span></b>";
 			string = "<b><span style='color:#418eb5'>" + string + "</span></b>";
 			log("Selected text " + string + " from " + value);
@@ -505,6 +589,7 @@ public class Common extends SetupInit {
 				value = webElement.getAttribute("class");
 			}
 			allureLog("Selected text " + index + " from " + value);
+			// logList.add("Selected text " + index + " from " + value);
 			value = "<b><span style='color:#3f0713'>" + value + "</span></b>";
 			String string = "<b><span style='color:#418eb5'>" + index + "</span></b>";
 			log("Selected text " + string + " from " + value);
@@ -708,19 +793,41 @@ public class Common extends SetupInit {
 	 * @author dishant.doshi
 	 * @param state
 	 *            Assert true
+	 * @throws Exception
 	 * @creation date 28/09/2018
 	 */
 	public void verifyTrue(boolean state) {
 		if (verifyBackBtn())
 			clickOnBackBtn();
-		Assert.assertTrue(state);
+		try {
+			logStatus(state);
+			Assert.assertTrue(state);
+		} catch (Exception e) {
+			RuntimeException ex = new RuntimeException(e.getMessage());
+			ex.setStackTrace(e.getStackTrace());
+			throw ex;
+		}
 		String str = "Test Data Successfuly Verified";
+		// logList.add(str);
 		log("</br><b style='color:#02563d'>" + str + "</b></br>");
+	}
+
+	public void logStatus(boolean success) throws Exception {
+		if (!success) {
+			throw new Exception("Method has return false");
+		}
+	}
+
+	public void logStatus(boolean success, String message) throws Exception {
+		if (!success) {
+			throw new Exception(message);
+		}
 	}
 
 	public void verifyTrue(boolean state, boolean backBtn) {
 		Assert.assertTrue(state);
 		String str = "Test Data Successfuly Verified";
+		// logList.add(str);
 		log("</br><b style='color:#02563d'>" + str + "</b></br>");
 	}
 
@@ -733,6 +840,7 @@ public class Common extends SetupInit {
 	public void verifyFalse(boolean state) {
 		Assert.assertFalse(state);
 		String str = "Test Data Successfuly Verified";
+		// logList.add(str);
 		log("</br><b style='color:#02563d'>" + str + "</b></br>");
 	}
 
@@ -768,11 +876,13 @@ public class Common extends SetupInit {
 		if (isDisplayed(validationToolTipSelect)) {
 			String validationMessage = "Tooltip Validation Message : "
 					+ getAttributeValue(validationToolTipSelect, "data-original-title");
+			// logList.add(validationMessage);
 			log("</br><b style='color:#E82F08'>" + validationMessage + "</b></br>");
 			return true;
 		} else if (isDisplayed(validationToolTip)) {
 			String validationMessage = "Tooltip Validation Message : "
 					+ getAttributeValue(validationToolTip, "data-original-title");
+			// logList.add(validationMessage);
 			log("</br><b style='color:#E82F08'>" + validationMessage + "</b></br>");
 
 			return true;
@@ -816,6 +926,7 @@ public class Common extends SetupInit {
 			return getUIText(paginationCurrentValue);
 		else {
 			String str = "No Records Found";
+			// logList.add(str);
 			log("</br><b style='color:#02563d'>" + str + "</b></br>");
 			return paginationValue;
 		}
@@ -843,12 +954,15 @@ public class Common extends SetupInit {
 			try {
 				text = "Strip Confirmation Message : " + getUIText(stripText);
 			} catch (Exception e) {
+				// logList.add("Strip Message Not Generated.");
 				log("</br><b style='color:#02563d'> Strip Message Not Generated.</b></br>");
 				return false;
 			}
+			// logList.add(text);
 			log("</br><b style='color:#02563d'>" + text + "</b></br>");
 			return true;
 		} else {
+			// logList.add("Strip Message Not Generated.");
 			log("</br><b style='color:#02563d'> Strip Message Not Generated.</b></br>");
 			return false;
 		}
@@ -1193,6 +1307,7 @@ public class Common extends SetupInit {
 		for (int i = 0; i < list.size(); i++) {
 			list.get(i).click();
 			value = list.get(i).getAttribute("value");
+			// logList.add(value);
 			value = "<b><span style='color:#3f0713'>" + value + "</span></b>";
 			log("Clicked on " + value);
 		}
@@ -1596,7 +1711,8 @@ public class Common extends SetupInit {
 	}
 
 	public String getIPOfNode() {
-		boolean isRemote = Boolean.parseBoolean(ReadProperty.getPropertyValue(""));
+		// boolean isRemote = Boolean.parseBoolean(ReadProperty.getPropertyValue(""));
+		boolean isRemote = Boolean.parseBoolean(getTestData("Master", "isRemoteEnable"));
 		if (isRemote) {
 			try {
 				Thread.sleep(1000);

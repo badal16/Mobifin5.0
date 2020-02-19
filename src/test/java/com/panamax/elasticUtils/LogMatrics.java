@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.panamax.init.ReadProperty;
 
 public class LogMatrics {
 
@@ -55,8 +56,8 @@ public class LogMatrics {
 				elasticData.put("timeStamp", sdf.format(new Date()));
 
 				Gson gson = new Gson();
-//				ObjectMapper objectMapper = new ObjectMapper();
-//				String json = objectMapper.writeValueAsString(elasticData);
+				// ObjectMapper objectMapper = new ObjectMapper();
+				// String json = objectMapper.writeValueAsString(elasticData);
 				Client client = ClientBuilder.newClient();
 				WebTarget webTarget = null;
 				if (this.indexName != null && this.indexType != null) {
@@ -68,8 +69,7 @@ public class LogMatrics {
 				DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd_MM_yyyy");
 				LocalDateTime currentDate = LocalDateTime.now();
 				String date = dateformatter.format(currentDate);
-				elasticData.put("Task Name", elasticData.get("Task Name") + date);
-
+				elasticData.put("Task Name", ReadProperty.getPropertyValue("TASK_NAME") + "_" + date);
 				String temp = gson.toJson(elasticData);
 				Response response = webTarget.request().post(Entity.entity(temp, MediaType.APPLICATION_JSON),
 						Response.class);
@@ -85,9 +85,9 @@ public class LogMatrics {
 
 	public static void main(String[] args)
 			throws InterruptedException, JsonParseException, JsonMappingException, IOException {
-		
+
 		LogMatrics logMatrics = new LogMatrics("testkibana", "docs");
-		Map<String, Object> map  = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("UserName", "Badal");
 		map.put("value", 0);
 		logMatrics.logToElasticsearch(map);

@@ -68,7 +68,7 @@ public class OperatorConfigSystemOperatorEntityWeb extends Common {
 
 	public void selectBusinessZone(String businessZone) {
 		clickOnElement(drpBusinessZone);
-		commonWait();
+//		commonWait();
 		clickOnElement(By.xpath("//li[normalize-space(text())='" + businessZone + "']"));
 	}
 
@@ -200,8 +200,8 @@ public class OperatorConfigSystemOperatorEntityWeb extends Common {
 				+ readJSFile("systemoperatorentity.label.usercategory", FileType.label)
 				+ "']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
 				+ map.get(mapKeys.get(3)).toString() + "']");
-		By businessZone = By
-				.xpath("//*[normalize-space(text()) = 'Business Zone']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
+		By businessZone = By.xpath(
+				"//*[normalize-space(text()) = 'Business Zone']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
 						+ map.get(mapKeys.get(4)).toString() + "']");
 		By kycLevel = By.xpath(
 				"//*[normalize-space(text()) = '" + readJSFile("systemoperatorentity.label.kyclevel", FileType.label)
@@ -211,8 +211,8 @@ public class OperatorConfigSystemOperatorEntityWeb extends Common {
 				.xpath("//*[normalize-space(text()) = '" + readJSFile("systemoperatorentity.label.role", FileType.label)
 						+ "']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
 						+ map.get(mapKeys.get(7)).toString() + "']");
-		By timeZone = By
-				.xpath("//*[normalize-space(text()) = 'Time Zone']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
+		By timeZone = By.xpath(
+				"//*[normalize-space(text()) = 'Time Zone']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
 						+ map.get(mapKeys.get(8)).toString() + "']");
 		By status = By.xpath(
 				"//*[normalize-space(text()) = '" + readJSFile("systemoperatorentity.label.status", FileType.label)
@@ -325,8 +325,8 @@ public class OperatorConfigSystemOperatorEntityWeb extends Common {
 				+ readJSFile("systemoperatorentity.label.usercategory", FileType.label)
 				+ "']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
 				+ map.get(mapKeys.get(3)).toString() + "']");
-		By businessZone = By
-				.xpath("//*[normalize-space(text()) = 'Business Zone']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
+		By businessZone = By.xpath(
+				"//*[normalize-space(text()) = 'Business Zone']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
 						+ map.get(mapKeys.get(4)).toString() + "']");
 		By kycLevel = By.xpath(
 				"//*[normalize-space(text()) = '" + readJSFile("systemoperatorentity.label.kyclevel", FileType.label)
@@ -336,8 +336,8 @@ public class OperatorConfigSystemOperatorEntityWeb extends Common {
 				.xpath("//*[normalize-space(text()) = '" + readJSFile("systemoperatorentity.label.role", FileType.label)
 						+ "']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
 						+ map.get(mapKeys.get(7)).toString() + "']");
-		By timeZone = By
-				.xpath("//*[normalize-space(text()) = 'Time Zone']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
+		By timeZone = By.xpath(
+				"//*[normalize-space(text()) = 'Time Zone']//ancestor:: div[@class='ant-row ant-form-item']//*[normalize-space(text())='"
 						+ map.get(mapKeys.get(8)).toString() + "']");
 		By status = By.xpath(
 				"//*[normalize-space(text()) = '" + readJSFile("systemoperatorentity.label.status", FileType.label)

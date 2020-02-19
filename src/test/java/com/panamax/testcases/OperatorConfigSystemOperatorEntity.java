@@ -14,8 +14,10 @@ public class OperatorConfigSystemOperatorEntity extends Common {
 
 	HomeWeb homePage;
 	OperatorConfigSystemOperatorEntityWeb operatorConfigSystemOperatorEntityWeb;
-	int count = 0;
 	int sortCounter = 0;
+	private long startTime;
+	long start = Long.MAX_VALUE;
+	long startMS;
 
 	/**
 	 * @author shivani.patel For Platform Configuration - SystemOperatorEntity - Add
@@ -23,14 +25,13 @@ public class OperatorConfigSystemOperatorEntity extends Common {
 	 */
 	@Test(dataProvider = "SystemOperatorEntity_Add", dataProviderClass = TestDataImport.class, description = "Id: AddSystemOperatorEntity, Author: shivani.patel")
 	public void addSystemOperatorEntity(Map<Object, Object> map) {
-
+		startTime = System.currentTimeMillis();
 		try {
+			map.put("Test Start Time", startTime);
+			map.put("Class Name", this.getClass().getName());
 			map.put("Method Name", "addSystemOperatorEntity");
-			if (count == 0) {
-				homePage = goToHome();
-				operatorConfigSystemOperatorEntityWeb = homePage.clickOnOperatorConfigSystemOperatorEntity();
-				count++;
-			}
+			homePage = goToHome();
+			operatorConfigSystemOperatorEntityWeb = homePage.clickOnOperatorConfigSystemOperatorEntity();
 			operatorConfigSystemOperatorEntityWeb.addSystemOperatorEntity(map, getMapKeys(map));
 			verifyTrue(operatorConfigSystemOperatorEntityWeb.verifyAddedSystemOperatorEntity(map, getMapKeys(map)));
 			map.put("value", 100);
@@ -50,13 +51,13 @@ public class OperatorConfigSystemOperatorEntity extends Common {
 	 */
 	@Test(dataProvider = "SystemOperatorEntity_Edit", dataProviderClass = TestDataImport.class, description = "Id: EditSystemOperatorEntity, Author: shivani.patel")
 	public void editSystemOperatorEntity(Map<Object, Object> map) {
+		startTime = System.currentTimeMillis();
 		try {
+			map.put("Test Start Time", startTime);
+			map.put("Class Name", this.getClass().getName());
 			map.put("Method Name", "addSystemOperatorEntity");
-			if (count == 0) {
-				homePage = goToHome();
-				operatorConfigSystemOperatorEntityWeb = homePage.clickOnOperatorConfigSystemOperatorEntity();
-				count++;
-			}
+			homePage = goToHome();
+			operatorConfigSystemOperatorEntityWeb = homePage.clickOnOperatorConfigSystemOperatorEntity();
 			operatorConfigSystemOperatorEntityWeb.editSystemOperatorEntity(map, getMapKeys(map));
 			verifyTrue(operatorConfigSystemOperatorEntityWeb.verifyEditedSystemOperatorEntity(map, getMapKeys(map)));
 			map.put("value", 100);
@@ -75,13 +76,13 @@ public class OperatorConfigSystemOperatorEntity extends Common {
 	 */
 	@Test(dataProvider = "SystemOperatorEntity_Delete", dataProviderClass = TestDataImport.class, description = "Id: DeleteSystemOperatorEntity, Author: shivani.patel")
 	public void deleteSystemOperatorEntity(Map<Object, Object> map) {
+		startTime = System.currentTimeMillis();
 		try {
+			map.put("Test Start Time", startTime);
+			map.put("Class Name", this.getClass().getName());
 			map.put("Method Name", "addSystemOperatorEntity");
-			if (count == 0) {
-				homePage = goToHome();
-				operatorConfigSystemOperatorEntityWeb = homePage.clickOnOperatorConfigSystemOperatorEntity();
-				count++;
-			}
+			homePage = goToHome();
+			operatorConfigSystemOperatorEntityWeb = homePage.clickOnOperatorConfigSystemOperatorEntity();
 			if (operatorConfigSystemOperatorEntityWeb.deleteSystemOperatorEntity(map, getMapKeys(map)))
 				verifyFalse(
 						operatorConfigSystemOperatorEntityWeb.verifyDeletedSystemOperatorEntity(map, getMapKeys(map)));
@@ -100,13 +101,13 @@ public class OperatorConfigSystemOperatorEntity extends Common {
 	 */
 	@Test(dataProvider = "SystemOperatorEntity_Sort", dataProviderClass = TestDataImport.class, description = "Id: sortSystemOperatorEntity, Author: Dishant Doshi")
 	public void sortSystemOperatorEntity(Map<Object, Object> map) {
+		startTime = System.currentTimeMillis();
 		try {
+			map.put("Test Start Time", startTime);
+			map.put("Class Name", this.getClass().getName());
 			map.put("Method Name", "addSystemOperatorEntity");
-			if (count == 0) {
-				homePage = goToHome();
-				operatorConfigSystemOperatorEntityWeb = homePage.clickOnOperatorConfigSystemOperatorEntity();
-				count++;
-			}
+			homePage = goToHome();
+			operatorConfigSystemOperatorEntityWeb = homePage.clickOnOperatorConfigSystemOperatorEntity();
 			if (sortCounter == 0) {
 				sortCounter++;
 				List<String> list = addColumnInGrid();

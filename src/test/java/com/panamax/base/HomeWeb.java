@@ -8,6 +8,7 @@ import com.panamax.init.Common;
 public class HomeWeb extends BaseWeb {
 
 	By homeButton = By.xpath("//*[@class='ant-breadcrumb-link']//i");
+	By logo = By.xpath("//img[@alt='logo']");
 
 	String homeURL;
 
@@ -26,6 +27,7 @@ public class HomeWeb extends BaseWeb {
 		/*
 		 * if(!getCurrentURL().equals(homeURL)) clickOnElement(homeButton);
 		 */
+		clickOnElement(logo);
 		return new HomeWeb(this.driver);
 	}
 

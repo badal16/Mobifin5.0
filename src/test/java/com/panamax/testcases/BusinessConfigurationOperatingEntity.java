@@ -15,6 +15,9 @@ public class BusinessConfigurationOperatingEntity extends Common {
 	BusinessConfigurationOperatingEntityWeb businessConfigurationOperatingEntityWeb;
 	int count = 0;
 	int sortCounter = 0;
+	private long startTime;
+	long start = Long.MAX_VALUE;
+	long startMS;
 
 	/**
 	 * @author shivani.patel For Business Configuration - OperatingEntity - Add
@@ -22,13 +25,13 @@ public class BusinessConfigurationOperatingEntity extends Common {
 	 */
 	@Test(dataProvider = "OperatingEntity_Add", dataProviderClass = TestDataImport.class, description = "Id: AddOperatingEntity, Author: shivani.patel")
 	public void addOperatingEntity(Map<Object, Object> map) {
+		startTime = System.currentTimeMillis();
 		try {
-			map.put("Method Name", "addSystemOperatorEntity");
-			if (count == 0) {
-				homePage = goToHome();
-				businessConfigurationOperatingEntityWeb = homePage.clickOnBusinessConfigOperatingEntity();
-				count++;
-			}
+			map.put("Test Start Time", startTime);
+			map.put("Class Name", this.getClass().getName());
+			map.put("Method Name", "addOperatingEntity");
+			homePage = goToHome();
+			businessConfigurationOperatingEntityWeb = homePage.clickOnBusinessConfigOperatingEntity();
 			businessConfigurationOperatingEntityWeb.addOperatingEntity(map, getMapKeys(map));
 			verifyTrue(businessConfigurationOperatingEntityWeb.verifyAddedOperatingEntity(map, getMapKeys(map)));
 			map.put("value", 100);
@@ -46,13 +49,13 @@ public class BusinessConfigurationOperatingEntity extends Common {
 	 */
 	@Test(dataProvider = "OperatingEntity_Edit", dataProviderClass = TestDataImport.class, description = "Id: EditOperatingEntity, Author: shivani.patel")
 	public void editOperatingEntity(Map<Object, Object> map) {
+		startTime = System.currentTimeMillis();
 		try {
+			map.put("Test Start Time", startTime);
+			map.put("Class Name", this.getClass().getName());
 			map.put("Method Name", "addSystemOperatorEntity");
-			if (count == 0) {
-				homePage = goToHome();
-				businessConfigurationOperatingEntityWeb = homePage.clickOnBusinessConfigOperatingEntity();
-				count++;
-			}
+			homePage = goToHome();
+			businessConfigurationOperatingEntityWeb = homePage.clickOnBusinessConfigOperatingEntity();
 			businessConfigurationOperatingEntityWeb.editOperatingEntity(map, getMapKeys(map));
 			verifyTrue(businessConfigurationOperatingEntityWeb.verifyEditedOperatingEntity(map, getMapKeys(map)));
 			map.put("value", 100);
@@ -70,13 +73,13 @@ public class BusinessConfigurationOperatingEntity extends Common {
 	 */
 	@Test(dataProvider = "OperatingEntity_Delete", dataProviderClass = TestDataImport.class, description = "Id: DeleteOperatingEntity, Author: shivani.patel")
 	public void deleteOperatingEntity(Map<Object, Object> map) {
+		startTime = System.currentTimeMillis();
 		try {
+			map.put("Test Start Time", startTime);
+			map.put("Class Name", this.getClass().getName());
 			map.put("Method Name", "addSystemOperatorEntity");
-			if (count == 0) {
-				homePage = goToHome();
-				businessConfigurationOperatingEntityWeb = homePage.clickOnBusinessConfigOperatingEntity();
-				count++;
-			}
+			homePage = goToHome();
+			businessConfigurationOperatingEntityWeb = homePage.clickOnBusinessConfigOperatingEntity();
 			if (businessConfigurationOperatingEntityWeb.deleteOperatingEntity(map, getMapKeys(map)))
 				verifyFalse(businessConfigurationOperatingEntityWeb.verifyDeletedOperatingEntity(map, getMapKeys(map)));
 

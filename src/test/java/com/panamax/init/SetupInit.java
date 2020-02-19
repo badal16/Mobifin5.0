@@ -113,7 +113,6 @@ public class SetupInit {
 	Wait<WebDriver> wait;
 	static URL remote_grid;
 	int reloadCounter = 0;
-
 	public ReadXMLData configFileObj;
 	protected ReadXMLData fwTestData = null;
 
@@ -270,13 +269,17 @@ public class SetupInit {
 		options.setExperimentalOption("prefs", chromePrefs);
 		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 		capabilities.setCapability("acceptSslCerts", true);
-		capabilities.setCapability("goog:chromeOptions", options);
-		capabilities.setCapability("screen-resolution", "1280x1024");
+		// capabilities.setCapability("goog:chromeOptions", options);
+		// capabilities.setCapability("screen-resolution", "1280x1024");
+
+		options.merge(capabilities);
+
 		if (isRemoteEnable.equalsIgnoreCase("true")) {
+			capabilities.setCapability("goog:chromeOptions", options);
 			driver = new RemoteWebDriver(remote_grid, capabilities);
 			return driver;
 		}
-		driver = new ChromeDriver(capabilities);
+		driver = new ChromeDriver(options);
 		return driver;
 	}
 
@@ -466,8 +469,7 @@ public class SetupInit {
 	}
 
 	public WebElement findVisibleElement(By locator) {
-		return waitAndFindElement(locator, Condition.isDisplayed, this.MAX_WAIT_TIME_IN_SEC,
-				this.POLLING_MAX_TIME_IN_MILLISEC);
+		return waitAndFindElement(locator);
 	}
 
 	public WebElement findPresentElement(By locator) {
@@ -506,6 +508,24 @@ public class SetupInit {
 			}
 			break;
 		}
+		if (!isVisibleInViewport(foo)) {
+			scrollToElement(foo);
+		}
+		return foo;
+	}
+
+	private WebElement waitAndFindElement(By locator, int... timeOutInSeconds) {
+		WebElement foo = null;
+		do {
+		} while (!waitForLoader());
+		do {
+		} while (!isAjaxCallCompleted());
+		int time = Integer.parseInt(ReadProperty.getPropertyValue("MAX_WAIT_TIME_IN_SEC"));
+		if (timeOutInSeconds.length != 0)
+			if (timeOutInSeconds[0] > 0)
+				time = timeOutInSeconds[0];
+		this.wait = new WebDriverWait(driver, time);
+		foo = (WebElement) this.wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 		if (!isVisibleInViewport(foo)) {
 			scrollToElement(foo);
 		}
@@ -598,6 +618,7 @@ public class SetupInit {
 		case "web":
 			try {
 				setDriver(targetBrowser);
+				new Common().commonWait(5);
 				testContext.setAttribute("WebDriver", this.driver);
 			} catch (Exception e) {
 				System.out.println(e);
@@ -628,6 +649,7 @@ public class SetupInit {
 
 	@AfterMethod(alwaysRun = true)
 	public void tearDown(ITestResult testResult) {
+		// logList.clear();
 		if (appType.equals("pcloudy") || appType.equals("pcloudyrunner")) {
 			String methodDesc = testResult.getMethod().getConstructorOrMethod().getMethod().getAnnotation(Test.class)
 					.description().toString();
@@ -821,6 +843,47 @@ public class SetupInit {
 		}
 		commonWeb = new Common();
 		commonWeb.log(createScreenshotLink(screenShotName, screenShotLoaction.toString()));
+	}
+
+	public String makeScreenshot(String testClassName, String testMethod) {
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+		String currentDate = dateFormat.format(date);
+		String currentTime = timeFormat.format(date);
+
+		String currentDir = System.getProperty("user.dir");
+
+		String folderPath = currentDir + File.separator + "Failure_Screenshots" + File.separator + testClassName
+				+ File.separator + currentDate.replaceAll("/", "_");
+		folderPath = folderPath.trim();
+
+		String screenshotName = currentTime.replace(":", "_") + ".png";
+
+		String filePath = folderPath + File.separator + testMethod + "_" + screenshotName;
+
+		filePath = filePath.trim();
+		File screenshotLocation = new File(folderPath);
+		if (!screenshotLocation.getAbsoluteFile().exists())
+			screenshotLocation.mkdir();
+
+		File screenshot;
+		WebDriver augmentedDriver = null;
+		if (appType.equalsIgnoreCase("web"))
+			augmentedDriver = new Augmenter().augment(driver);
+		else
+			augmentedDriver = new Augmenter().augment(mobileDriver);
+		screenshot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
+		try {
+
+			File f = new File(filePath);
+			FileUtils.copyFile(screenshot, f);
+			return filePath;
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
+		return "Failed to capture a sccreenshot";
 	}
 
 	public String createScreenshotLink(String screenShotName, String link_text) {
